@@ -3,6 +3,7 @@
   "version": "1.0.1-custom.001",
   "description": "webcomponent wrapper for svelte",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "SNOWPACK_PUBLIC_NODE_ENV=test web-test-runner \"tests/*.test.js\" --coverage"
   },
