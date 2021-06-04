@@ -60,7 +60,7 @@ export default function(opts){
       let props = opts.defaults ? opts.defaults : {};
       let slots
       props.$$scope = {}
-      Array.from(this.attributes).forEach( attr => props[attr.name] = attr.value )
+      Array.from(this.attributes).forEach( attr => props[this.transformAttributeNameToPropName(attr.name)] = attr.value )
       props.$$scope = {}
       if(opts.shadow){
         slots = this.getShadowSlots()
@@ -129,7 +129,7 @@ export default function(opts){
             this.elem.$set({"$$slots":createSlots(slots)})
             // do full re-render on slot count change - needed for tabs component
             if(this.slotcount != Object.keys(slots).length){
-              Array.from(this.attributes).forEach( attr => props[attr.name] = attr.value )
+              Array.from(this.attributes).forEach( attr => props[this.transformAttributeNameToPropName(attr.name)] = attr.value )
               this.slotcount = Object.keys(slots).length
               root.innerHTML = ""
               this.elem = new opts.component({	target: root,	props});
@@ -143,6 +143,16 @@ export default function(opts){
       if(this.elem && newValue!=oldValue){
         this.elem.$set({[name]:newValue})
       }
+    }
+
+    transformAttributeNameToPropName(name) {
+      // transform kebab-case to camelCase
+      return name
+        .split("-")
+        .map((item, index) => index 
+          ? item.charAt(0).toUpperCase() + item.slice(1).toLowerCase() 
+          : item.toLowerCase())
+        .join("");
     }
   }  
   window.customElements.define(opts.tagname, Wrapper);
